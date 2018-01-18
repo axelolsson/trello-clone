@@ -1,0 +1,181 @@
+html,
+body {
+  background: #9999ff;
+  margin: 0;
+  padding: 30px 0 0;
+  font-family: sans-serif;
+  color: #4d4d4d;
+}
+
+a {
+  color: #444;
+
+  &:hover {
+    color: #111;
+  }
+}
+
+header {
+  display: flex;
+  background: #333355;
+  margin: 0;
+  position: fixed;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  h1 {
+    color: #ddd;
+    font-weight: bold;
+    font-size: 24px;
+  }
+}
+
+main {
+  padding: 20px;
+}
+
+.list-wrapper {
+  width: 270px;
+  margin: 0 5px;
+  height: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+
+  &.is-idle {
+    .list__add {
+      background: rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      color: #fff;
+    }
+    &:hover {
+      .list__add {
+        background: rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+
+  .list {
+    background: #e2e4e6;
+    border-radius: 3px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    position: relative;
+    white-space: normal;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    user-select: none;
+
+    &__title {
+      font-size: 14px;
+      min-height: 18px;
+      padding: 8px 10px;
+      margin: 0;
+      color: #4d4d4d;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &__cards {
+      flex: 1 1 auto;
+      margin-bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin: 0 4px;
+      padding: 0 4px;
+      z-index: 1;
+      min-height: 0;
+
+      &__card {
+        text-decoration: none;
+        display: block;
+        background: #fff;
+        color: #444;
+        padding: 6px 6px 6px 8px;
+        font-size: 14px;
+        border-radius: 3px;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 5px;
+        cursor: pointer;
+        transition: transform 0.25s ease;
+        transition: opacity 0.25s ease;
+        height: 16px;
+
+        &__title {
+          display: none;
+        }
+
+        &:hover {
+          opacity: 0.5;
+        }
+
+        &:active {
+          opacity: 0.5;
+          transform: rotate(2deg);
+        }
+      }
+    }
+
+    &__card__composer {
+      border-radius: 0 0 3px 3px;
+      color: #838c91;
+      display: block;
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      position: relative;
+      text-decoration: none;
+      user-select: none;
+
+      &:hover {
+        background-color: #cdd2d4;
+        color: #4d4d4d;
+        text-decoration: underline;
+      }
+    }
+
+    &__add {
+      height: auto;
+      min-height: 30px;
+      padding: 4px;
+      border-radius: 3px;
+      background-color: #e2e4e6;
+      transition: background 85ms ease-in, opacity 40ms ease-in,
+        border-color 85ms ease-in;
+
+      &__form {
+        &__placeholder {
+          display: block;
+          padding: 7px;
+          color: hsla(0, 0%, 100%, 0.7);
+          transition: color 85ms ease-in;
+        }
+
+        &__name {
+          border-color: transparent;
+          box-shadow: none;
+          cursor: pointer;
+          display: none;
+          margin: 0;
+        }
+
+        &__controls {
+          display: none;
+
+          &__save-btn {
+            float: left;
+            min-height: 30px;
+            height: 30px;
+            margin-top: 0;
+            padding-top: 4px;
+            padding-bottom: 4px;
+          }
+        }
+      }
+    }
+  }
+}
