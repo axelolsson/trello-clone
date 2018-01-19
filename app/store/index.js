@@ -64,4 +64,23 @@ export default class Store {
       callback();
     }
   }
+
+  remove (query, callback) {
+    let board = this.getLocalStorage();
+    let lists = board.lists.reduce((state, bucket) => {
+      return state.concat(
+        (query.listId === bucket.id) ?
+          Object.assign({}, bucket, {cards: bucket.cards.filter((card) => card.id !== query.cardId)}) :
+          bucket
+      );
+    }, []);
+
+    board.lists = lists;
+    this.setLocalStorage(board);
+
+    if (callback) {
+      callback(board);
+    }
+  }
+
 }

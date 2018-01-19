@@ -12,25 +12,34 @@ class Trello {
     this.store = store;
     this.board = this.store.getLocalStorage("trello-clone");
 
+    this.toggleEditCard = this.toggleEditCard.bind(this);
     this.toggleAddCard = this.toggleAddCard.bind(this);
+
     this.createCard = this.createCard.bind(this);
+    this.deleteCard = this.deleteCard.bind(this);
 
     this.render();
     this.initalize();
   }
 
   initalize() {
+    this.cardEdit = $(".list__cards__card__controls__edit");
+    this.cardDelete = $(".list__cards__card__controls__delete");
+
     this.cardForm = $(".list__card__composer");
-    this.save = $(".list__card__composer__new__btn-save");
-    this.cancel = $(".list__card__composer__new__btn-cancel");
+    this.cardFormSave = $(".list__card__composer__new__btn-save");
+    this.cardFormCancel = $(".list__card__composer__new__btn-cancel");
 
     this.addEventListeners();
   }
 
   addEventListeners() {
+    this.cardEdit.on("click", this.toggleEditCard);
+    this.cardDelete.on("click", this.deleteCard);
+
     this.cardForm.on("click", this.toggleAddCard);
-    this.cancel.on("click", this.toggleAddCard);
-    this.save.on("click", this.createCard);
+    this.cardFormCancel.on("click", this.toggleAddCard);
+    this.cardFormSave.on("click", this.createCard);
   }
 
   getData(key) {
@@ -61,11 +70,19 @@ class Trello {
     newCardComposerAddBtn.toggleClass("hide");
   }
 
+  toggleEditCard(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log(":: TOGGLE EDIT CARD");
+  }
+
   createCard(e) {
     e.preventDefault();
     e.stopPropagation();
 
     let card = {};
+
     $(e.currentTarget.form)
       .serializeArray()
       .map(field => (card[field.name] = field.value));
@@ -75,8 +92,7 @@ class Trello {
     }
 
     let listId = $(e.currentTarget)
-      .offsetParent()
-      .offsetParent()
+      .closest(".list")
       .data("list-id");
 
     let list = $.grep(this.board.lists, l => l.id == listId)[0];
@@ -93,7 +109,24 @@ class Trello {
 
   editCard() {}
   updateCard() {}
-  deleteCard() {}
+
+  deleteCard(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let listId = $(e.currentTarget)
+      .closest(".list")
+      .data("list-id");
+
+    let cardId = $(e.currentTarget)
+      .closest("a")
+      .data("id");
+
+    this.store.remove({ listId: listId, cardId: cardId }, board => {
+      this.board = board;
+      this.update();
+    });
+  }
 
   createList() {}
   updateList() {}

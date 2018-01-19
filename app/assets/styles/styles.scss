@@ -135,22 +135,48 @@ textarea {
         border-radius: 3px;
         border-bottom: 1px solid #ccc;
         margin-bottom: 5px;
-        cursor: pointer;
         transition: transform 0.25s ease;
         transition: opacity 0.25s ease;
         height: 16px;
+        position: relative;
+        z-index: 0;
 
-        &__title {
-          flex: 1;
+        &__details {
+          overflow: hidden;
+          position: relative;
+          z-index: 10;
+        }
+
+        &__controls {
+          background-clip: padding-box;
+          background-origin: padding-box;
+          border-radius: 3px;
+          opacity: .8;
+          padding: 4px;
+          position: absolute;
+          right: 3px;
+          top: 3px;
+          visibility: hidden;
+          z-index: 40;
+
+          &__edit {
+            display: none;
+          }
+
+          &:hover {
+            color: #4d4d4d;
+            background: #d6dadc;
+            opacity: 1;
+          }
         }
 
         &:hover {
-          opacity: 0.5;
+          .list__cards__card__controls {
+            visibility: initial;
+          }
         }
 
         &:active {
-          opacity: 0.5;
-          transform: rotate(2deg);
         }
       }
     }
