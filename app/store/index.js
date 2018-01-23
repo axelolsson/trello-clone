@@ -65,13 +65,26 @@ export default class Store {
     }
   }
 
-  remove (query, callback) {
+  update(query, callback) {
     let board = this.getLocalStorage();
+
     let lists = board.lists.reduce((state, bucket) => {
       return state.concat(
-        (query.listId === bucket.id) ?
-          Object.assign({}, bucket, {cards: bucket.cards.filter((card) => card.id !== query.cardId)}) :
-          bucket
+        query.listId === bucket.id
+          ? Object.assign({}, bucket, {
+              cards: bucket.cards.map((card) => {
+                if (card.id === query.cardId) {
+                  return {
+                    id: card.id,
+                    title: query.data.value,
+                    description: card.description
+                  }
+                } else {
+                  return card;
+                }
+              })
+            })
+          : bucket
       );
     }, []);
 
@@ -83,4 +96,23 @@ export default class Store {
     }
   }
 
+  remove(query, callback) {
+    let board = this.getLocalStorage();
+    let lists = board.lists.reduce((state, bucket) => {
+      return state.concat(
+        query.listId === bucket.id
+          ? Object.assign({}, bucket, {
+              cards: bucket.cards.filter(card => card.id !== query.cardId)
+            })
+          : bucket
+      );
+    }, []);
+
+    board.lists = lists;
+    this.setLocalStorage(board);
+
+    if (callback) {
+      callback(board);
+    }
+  }
 }

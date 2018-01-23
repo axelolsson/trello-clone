@@ -8,7 +8,7 @@ body {
 }
 
 a {
-  color: #444;
+  color: #838c91;
 
   &:hover {
     color: #111;
@@ -25,6 +25,7 @@ header {
   left: 0;
   right: 0;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+
   h1 {
     color: #ddd;
     font-weight: bold;
@@ -43,7 +44,7 @@ button {
   color: #fff;
   cursor: pointer;
   font-weight: 700;
-  line-height: 22px;
+  line-height: 16px;
   text-align: center;
   text-decoration: none;
   box-sizing: border-box;
@@ -55,12 +56,17 @@ button {
 
 textarea {
   color: #333;
-  font: 14px Helvetica Neue,Arial,Helvetica,sans-serif;
+  font: 14px Helvetica Neue, Arial, Helvetica, sans-serif;
   line-height: 18px;
   font-weight: 400;
   margin: 0;
-  transition: background 85ms ease-in,border-color 85ms ease-in;
+  transition: background 85ms ease-in, border-color 85ms ease-in;
   width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+  resize: none;
+  height: 90px;
+
   &:focus {
     outline: none;
   }
@@ -91,191 +97,297 @@ textarea {
       }
     }
   }
+}
 
-  .list {
-    background: #e2e4e6;
-    border-radius: 3px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    max-height: 100%;
-    position: relative;
-    white-space: normal;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    user-select: none;
+.list {
+  background: #e2e4e6;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  position: relative;
+  white-space: normal;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  user-select: none;
 
-    &__title {
-      font-size: 14px;
-      min-height: 18px;
-      padding: 8px 10px;
-      margin: 0;
-      color: #4d4d4d;
-      &:hover {
-        cursor: pointer;
-      }
+  &__title {
+    font-size: 14px;
+    min-height: 18px;
+    padding: 8px 10px;
+    margin: 0;
+    color: #4d4d4d;
+    &:hover {
+      cursor: pointer;
     }
+  }
 
-    &__cards {
-      flex: 1 1 auto;
-      margin-bottom: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      margin: 0 4px;
-      padding: 0 4px;
-      z-index: 1;
-      min-height: 0;
+  &__cards {
+    flex: 1 1 auto;
+    margin-bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 0 4px;
+    padding: 0 4px;
+    z-index: 1;
+    min-height: 0;
 
-      &__card {
-        text-decoration: none;
-        display: flex;
-        background: #fff;
-        color: #444;
-        padding: 6px 6px 6px 8px;
-        font-size: 14px;
-        border-radius: 3px;
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 5px;
-        transition: transform 0.25s ease;
-        transition: opacity 0.25s ease;
-        height: 16px;
+    &__card {
+      text-decoration: none;
+      display: flex;
+      background: #fff;
+      color: #444;
+      padding: 6px 6px 6px 8px;
+      font-size: 14px;
+      border-radius: 3px;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 5px;
+      transition: transform 0.25s ease;
+      transition: opacity 0.25s ease;
+      height: 16px;
+      position: relative;
+      z-index: 0;
+
+      &__details {
+        overflow: hidden;
         position: relative;
-        z-index: 0;
+        z-index: 10;
+      }
 
-        &__details {
-          overflow: hidden;
-          position: relative;
-          z-index: 10;
+      &__controls {
+        background-clip: padding-box;
+        background-origin: padding-box;
+        display: flex;
+        color: hsl(0, 0%, 70%);
+        opacity: 0.8;
+        padding: 3px;
+        position: absolute;
+        top: 0px;
+        right: 3px;
+
+        visibility: hidden;
+        z-index: 40;
+
+        &__edit,
+        &__delete {
+          padding: 3px 7px 3px 6px;
+          background: #e2e4e6;
+          box-shadow: 0 1px 0 #b0b4b6;
         }
 
-        &__controls {
-          background-clip: padding-box;
-          background-origin: padding-box;
-          border-radius: 3px;
-          opacity: .8;
-          padding: 4px;
-          position: absolute;
-          right: 3px;
-          top: 3px;
-          visibility: hidden;
-          z-index: 40;
-
-          &__edit {
-            display: none;
-          }
+        &__edit {
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
 
           &:hover {
+            background: #cdd2d4;
             color: #4d4d4d;
-            background: #d6dadc;
-            opacity: 1;
+          }
+        }
+
+        &__delete {
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+
+          &:hover {
+            background: #cdd2d4;
+            color: #4d4d4d;
           }
         }
 
         &:hover {
-          .list__cards__card__controls {
-            visibility: initial;
-          }
-        }
-
-        &:active {
-        }
-      }
-    }
-
-    &__card__composer {
-      border-radius: 0 0 3px 3px;
-      color: #838c91;
-      display: block;
-      flex: 0 0 auto;
-      padding: 8px 10px;
-      position: relative;
-      text-decoration: none;
-      user-select: none;
-
-      &__btn {
-        text-decoration: none;
-      }
-
-      &__new {
-        &__textarea {
-          background: none;
-          border: none;
-          box-shadow: none;
-          height: auto;
-          margin-bottom: 4px;
-          max-height: 162px;
-          min-height: 54px;
-          overflow-y: auto;
-          padding: 0;
-          resize: none;
-          word-wrap: break-word;
-        }
-
-        &__details {
-          background-color: #fff;
-          border-bottom: 1px solid #ccc;
-          border-radius: 3px;
-          cursor: pointer;
-          display: block;
-          margin-bottom: 6px;
-          max-width: 300px;
-          min-height: 20px;
-          position: relative;
-          text-decoration: none;
-          z-index: 0;
-          overflow: hidden;
-          padding: 6px 6px 2px 8px;
-          position: relative;
-          z-index: 10;
-        }
-        &__controls {
-          display: flex;
+          opacity: 1;
         }
       }
 
       &:hover {
-        background-color: #cdd2d4;
-        color: #4d4d4d;
+        .list__cards__card__controls {
+          visibility: initial;
+        }
+      }
+    }
+  }
+
+  &__card__composer {
+    border-radius: 0 0 3px 3px;
+    color: #838c91;
+    display: block;
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    position: relative;
+    text-decoration: none;
+    user-select: none;
+
+    &__btn {
+      text-decoration: none;
+    }
+
+    &__new {
+      &__textarea {
+        background: none;
+        border: none;
+        box-shadow: none;
+        height: auto;
+        margin-bottom: 4px;
+        max-height: 162px;
+        min-height: 54px;
+        overflow-y: auto;
+        padding: 0;
+        resize: none;
+        word-wrap: break-word;
+      }
+
+      &__details {
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        border-radius: 3px;
+        cursor: pointer;
+        display: block;
+        margin-bottom: 6px;
+        max-width: 300px;
+        min-height: 20px;
+        position: relative;
+        text-decoration: none;
+        z-index: 0;
+        overflow: hidden;
+        padding: 6px 6px 2px 8px;
+        position: relative;
+        z-index: 10;
+      }
+      &__controls {
+        display: flex;
       }
     }
 
-    &__add {
-      height: auto;
-      min-height: 30px;
-      padding: 4px;
-      border-radius: 3px;
-      background-color: #e2e4e6;
-      transition: background 85ms ease-in, opacity 40ms ease-in,
+    &:hover {
+      background-color: #cdd2d4;
+      color: #4d4d4d;
+    }
+  }
+
+  &__add {
+    height: auto;
+    min-height: 30px;
+    padding: 4px;
+    border-radius: 3px;
+    background-color: #e2e4e6;
+    transition: background 85ms ease-in, opacity 40ms ease-in,
       border-color 85ms ease-in;
 
-      &__form {
-        &__placeholder {
-          display: block;
-          padding: 7px;
-          color: hsla(0, 0%, 100%, 0.7);
-          transition: color 85ms ease-in;
-        }
+    &__form {
+      &__placeholder {
+        display: block;
+        padding: 7px;
+        color: hsla(0, 0%, 100%, 0.7);
+        transition: color 85ms ease-in;
+      }
 
-        &__name {
-          border-color: transparent;
-          box-shadow: none;
-          cursor: pointer;
-          display: none;
-          margin: 0;
-        }
+      &__name {
+        border-color: transparent;
+        box-shadow: none;
+        cursor: pointer;
+        display: none;
+        margin: 0;
+      }
 
-        &__controls {
-          display: none;
+      &__controls {
+        display: none;
 
-          &__save-btn {
-            float: left;
-            min-height: 30px;
-            height: 30px;
-            margin-top: 0;
-            padding-top: 4px;
-            padding-bottom: 4px;
-          }
+        &__save-btn {
+          float: left;
+          min-height: 30px;
+          height: 30px;
+          margin-top: 0;
+          padding-top: 4px;
+          padding-bottom: 4px;
         }
       }
+    }
+  }
+}
+
+.card__editor {
+  background: hsla(0, 0%, 0%, 0.6);
+  bottom: 0;
+  color: #fff;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+
+  &__card {
+    position: absolute;
+    cursor: default;
+
+    &__buttons {
+      left: 100%;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      width: 240px;
+      z-index: 0;
+      transform: translateX(-20px);
+      transition: opacity 85ms ease-in, transform 85ms ease-in;
+      float: right;
+      margin: 0 8px 4px 0;
+
+      &.fade-in {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      &__delete {
+        background: hsla(0, 0%, 0%, 0.6);
+        border-radius: 3px;
+        clear: both;
+        color: hsl(0, 0%, 90%);
+        display: block;
+        float: left;
+        margin: 0 0 4px 8px;
+        padding: 6px 12px 6px 8px;
+        text-decoration: none;
+        transition: transform 85ms ease-in;
+
+        &:hover {
+          background: hsla(0, 0%, 0%, 0.8);
+          color: #fff;
+          transform: translateX(5px);
+        }
+
+        &__text {
+          margin-left: 4px;
+        }
+      }
+    }
+
+    &__edit {
+      z-index: 1;
+      &__details {
+        @extend .list__card__composer__new__details;
+        &__textarea {
+          @extend .list__card__composer__new__textarea;
+        }
+      }
+    }
+  }
+
+  &__close {
+    color: hsla(0, 0%, 100%, 0.6);
+    font-size: 25px;
+
+    padding: 9px;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    transition-property: transform, color;
+    transition-duration: 150ms;
+
+    &:hover {
+      color: hsla(0, 0%, 100%, 1);
+      cursor: pointer;
+      transform: scale(1.2);
     }
   }
 }

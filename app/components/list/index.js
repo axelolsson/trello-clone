@@ -1,16 +1,24 @@
 import Card from "../card";
 
-const List = (list) => {
-  let cards = list.cards.map((card) => {
-    return Card(card);
-  });
+export default class List  {
+  constructor(list, caller) {
+    this.list = list;
 
-  return (
-    `<div class="list-wrapper">
-      <div data-list-id="${list.id}" class="list">
-        <h2 class="list__title">${list.title}</h2>
+    this.cards = this.list.cards.map(card => {
+      return new Card(list.id, card, caller);
+    });
+
+    this.fragment = this.render();
+  }
+
+  render() {
+     return $(document.createRange().createContextualFragment(`<div class="list-wrapper">
+      <div data-list-id="${this.list.id}" class="list">
+        <h2 class="list__title">${this.list.title}</h2>
         <div class="list__cards">
-          ${cards.map((card) => card).join(' ')}
+          ${this.cards.map(card => {
+            return card.fragment
+          }).join("")}
         </div>
         <div class="list__card__composer">
           <form class="list__card__composer__new hide">
@@ -25,8 +33,6 @@ const List = (list) => {
           <a class="list__card__composer__btn " href="# ">Add a card…</a>
         </div>
       </div>
-    </div>`
-  );
-};
-
-export default List;
+    </div>`));
+  }
+}
