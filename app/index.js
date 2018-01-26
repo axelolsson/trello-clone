@@ -29,6 +29,10 @@ class Trello {
     this.cardFormTextarea = $(".list__card__composer__new__textarea");
     this.cardFormCancel = $(".list__card__composer__new__btn-cancel");
 
+    this.listForm = $(".list__add");
+    this.listFormSave = $(".list__add__form__controls__btn-save");
+    this.listFormCancel = $(".list__add__form__controls__btn-cancel");
+
     this.addEventListeners();
   }
 
@@ -37,6 +41,10 @@ class Trello {
 
     this.cardForm.on("click", this.toggleAddCard);
     this.cardFormCancel.on("click", this.toggleAddCard);
+
+    this.listForm.on("click", this.toggleAddList);
+    this.listFormSave.on("click", this.createList);
+    this.listFormCancel.on("click", this.toggleAddList);
   }
 
   toggleAddCard(e) {
@@ -65,10 +73,28 @@ class Trello {
     newCardComposerAddBtn.toggleClass("hide");
   }
 
+  toggleAddList(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if ($(e.target).hasClass("list__add__form__name")) {
+      return;
+    }
+
+    let newListComposerAddBtn = $(e.currentTarget);
+    let newListComposerWrapper = $(newListComposerAddBtn)
+      .closest(".list-wrapper")
+
+    newListComposerWrapper.toggleClass("is-idle");
+  }
+
   openCardEditor(e) {
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
+
+    debugger;
 
     let data = this.getData(e.currentTarget);
 
@@ -126,8 +152,8 @@ class Trello {
             <span href='#' class='list__add__form__placeholder'>Add a list…</span>
             <input class='list__add__form__name' type='text' name='name' placeholder='Add a list…' autocomplete='off' dir='auto' maxlength='512'>
             <div class='list__add__form__controls'>
-              <button class='list__add__form__controls--save-btn' type='submit'>Save</button>
-              <a class='list__add__form__controls--cancel-btn' href='#'></a>
+              <button class='list__add__form__controls__btn-save' type='submit'>Save</button>
+              <button class='list__add__form__controls__btn-cancel' href='#'>X</button>
             </div>
           </form>
         </div>
@@ -139,7 +165,7 @@ class Trello {
   }
 }
 
-$(document).ready(function() {
+$(function() {
   const store = new Store("trello-clone");
 
   new Trello(store, $("#app > main"));

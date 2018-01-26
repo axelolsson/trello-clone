@@ -11,6 +11,7 @@ export default class List  {
     this.fragment = this.render();
   }
 
+
   render() {
      return $(document.createRange().createContextualFragment(`<div class="list-wrapper">
       <div data-list-id="${this.list.id}" class="list">

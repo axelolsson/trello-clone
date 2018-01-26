@@ -43,6 +43,7 @@ button {
   box-shadow: 0 1px 0 #519839;
   color: #fff;
   cursor: pointer;
+  font: 14px Helvetica Neue, Arial, Helvetica, sans-serif;
   font-weight: 700;
   line-height: 16px;
   text-align: center;
@@ -52,6 +53,18 @@ button {
   margin-right: 7px;
   display: block;
   padding: 7px 18px;
+}
+
+input {
+  font: 14px Helvetica Neue, Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  background-color: #e2e4e6;
+  border: 1px solid #cdd2d4;
+  border-radius: 3px;
+  display: block;
+  margin-bottom: 12px;
+  padding: 9px;
 }
 
 textarea {
@@ -90,6 +103,29 @@ textarea {
       background: rgba(0, 0, 0, 0.12);
       cursor: pointer;
       color: #fff;
+      &__form {
+        &__placeholder {
+          display: block;
+          padding: 7px;
+          color: hsla(0, 0%, 100%, 0.7);
+          transition: color 85ms ease-in;
+        }
+        &__name {
+          display: none;
+        }
+        &__name {
+          background: none;
+          border-color: transparent;
+          box-shadow: none;
+          cursor: pointer;
+          display: none;
+          margin: 0;
+        }
+        &__controls {
+          height: 0;
+          margin: 0;
+        }
+      }
     }
     &:hover {
       .list__add {
@@ -144,7 +180,8 @@ textarea {
       margin-bottom: 5px;
       transition: transform 0.25s ease;
       transition: opacity 0.25s ease;
-      height: 16px;
+      height: auto;
+      line-height: 20px;
       position: relative;
       z-index: 0;
 
@@ -271,27 +308,28 @@ textarea {
     padding: 4px;
     border-radius: 3px;
     background-color: #e2e4e6;
-    transition: background 85ms ease-in, opacity 40ms ease-in,
-      border-color 85ms ease-in;
+    transition: background 85ms ease-in, opacity 40ms ease-in,border-color 85ms ease-in;
 
     &__form {
       &__placeholder {
-        display: block;
-        padding: 7px;
-        color: hsla(0, 0%, 100%, 0.7);
-        transition: color 85ms ease-in;
-      }
-
-      &__name {
-        border-color: transparent;
-        box-shadow: none;
-        cursor: pointer;
         display: none;
+      }
+      &__name {
+        background: rgba(0,0,0,.05);
+        border-color: #aaa;
+        display: block;
+        box-shadow: inset 0 1px 8px rgba(0,0,0,.15);
         margin: 0;
+        transition: margin 85ms ease-in,background 85ms ease-in;
+        width: 100%;
       }
 
       &__controls {
-        display: none;
+        height: 32px;
+        -webkit-transition: margin 85ms ease-in,height 85ms ease-in;
+        transition: margin 85ms ease-in,height 85ms ease-in;
+        overflow: hidden;
+        margin: 4px 0 0;
 
         &__save-btn {
           float: left;
