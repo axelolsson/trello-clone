@@ -1,9 +1,12 @@
 import "jquery";
+import dragula from "dragula";
 
 import Store from "./store";
 import List from "./components/list";
 import Editor from "./components/editor";
+import Composer from "./components/composer";
 
+import "./assets/styles/scrollbars.scss";
 import "./assets/styles/styles.scss";
 
 class Trello {
@@ -15,8 +18,10 @@ class Trello {
 
     this.openCardEditor = this.openCardEditor.bind(this);
     this.toggleAddCard = this.toggleAddCard.bind(this);
+    this.createList = this.createList.bind(this);
 
     this.getData = this.getData.bind(this);
+    this.getHighestIndex = this.getHighestIndex.bind(this);
 
     this.render();
     this.initalize();
@@ -33,6 +38,12 @@ class Trello {
     this.listFormSave = $(".list__add__form__controls__btn-save");
     this.listFormCancel = $(".list__add__form__controls__btn-cancel");
 
+    this.columns = $(".list-wrapper");
+    this.cardList = $(".list__cards");
+
+    this.columnEls = this.columns.toArray();
+    this.sortables = this.columnEls.concat(this.cardList.toArray());
+
     this.addEventListeners();
   }
 
@@ -45,6 +56,12 @@ class Trello {
     this.listForm.on("click", this.toggleAddList);
     this.listFormSave.on("click", this.createList);
     this.listFormCancel.on("click", this.toggleAddList);
+
+    dragula(this.sortables, {
+      direction: 'horizontal',
+      copy: false,
+      ignoreInputTextSelection: true
+    });
   }
 
   toggleAddCard(e) {
@@ -83,8 +100,9 @@ class Trello {
     }
 
     let newListComposerAddBtn = $(e.currentTarget);
-    let newListComposerWrapper = $(newListComposerAddBtn)
-      .closest(".list-wrapper")
+    let newListComposerWrapper = $(newListComposerAddBtn).closest(
+      ".list-wrapper"
+    );
 
     newListComposerWrapper.toggleClass("is-idle");
   }
@@ -93,8 +111,6 @@ class Trello {
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-
-    debugger;
 
     let data = this.getData(e.currentTarget);
 
@@ -113,8 +129,14 @@ class Trello {
     let cardEl = $(target).closest(".list__cards__card");
     let listEl = $(target).closest(".list");
 
-    let list = $.grep(this.board.lists, l => l.id == $(listEl).data("list-id"))[0];
-    let card = $.grep(list.cards, c => c.id === $(cardEl).data("card-id"))[0];
+    let list = $.grep(
+      this.board.lists,
+      l => l.id === $(listEl).data("list-id")
+    )[0];
+
+    let card = $.grep(
+      list.cards,
+      c => c.id === $(cardEl).data("card-id"))[0];
 
     return {
       list: {
@@ -128,7 +150,40 @@ class Trello {
     };
   }
 
-  createList() {}
+  getHighestIndex(lists) {
+    let highestIndex = -1;
+
+    lists.forEach(list => {
+      list.cards.forEach(card => {
+        if (card.id > highestIndex) {
+          highestIndex = card.id;
+        }
+      });
+    });
+
+    return highestIndex;
+  }
+
+  createList(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let listTitle = $(event.target)
+      .closest("form")
+      .serializeArray()[0].value;
+
+    let newList = {
+      id: this.getHighestIndex(this.board.lists),
+      title: listTitle,
+      cards: []
+    };
+
+    const listClass = new List(newList, this);
+
+    this.board.lists.push(listClass.list);
+    this.update();
+  }
+
   updateList() {}
   deleteList() {}
 
@@ -140,33 +195,23 @@ class Trello {
   render() {
     let caller = this;
 
+    $(this.root).empty();
+
     const lists = this.board.lists.map(list => {
       return new List(list, caller);
     });
 
-    $(this.root).html(
-      `
-      <div class='list-wrapper is-idle'>
-        <div class='list__add'>
-          <form class='list__add__form'>
-            <span href='#' class='list__add__form__placeholder'>Add a list…</span>
-            <input class='list__add__form__name' type='text' name='name' placeholder='Add a list…' autocomplete='off' dir='auto' maxlength='512'>
-            <div class='list__add__form__controls'>
-              <button class='list__add__form__controls__btn-save' type='submit'>Save</button>
-              <button class='list__add__form__controls__btn-cancel' href='#'>X</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      `
-    );
+    const listComposer = new Composer(this);
 
-    lists.map(list => $(this.root).append(list.fragment));
+    lists.push(listComposer);
+
+    const content = lists.map(list => list.fragment).join("");
+    $(this.root)[0].innerHTML = content;
   }
 }
 
 $(function() {
   const store = new Store("trello-clone");
 
-  new Trello(store, $("#app > main"));
+  new Trello(store, $("#board"));
 });

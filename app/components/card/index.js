@@ -44,7 +44,7 @@ export default class Card {
 
     let list = $.grep(this.caller.board.lists, l => l.id == listId)[0];
 
-    card.id = this.getHighestIndex(this.caller.board.lists) + 1;
+    card.id = this.caller.getHighestIndex(this.caller.board.lists) + 1;
     card.description = "";
 
     list.cards.push(card);
@@ -66,20 +66,6 @@ export default class Card {
       this.caller.board = board;
       this.caller.update();
     });
-  }
-
-  getHighestIndex(lists) {
-    let highestIndex = -1;
-
-    lists.forEach(list => {
-      list.cards.forEach(card => {
-        if (card.id > highestIndex) {
-          highestIndex = card.id;
-        }
-      });
-    });
-
-    return highestIndex;
   }
 
   render() {

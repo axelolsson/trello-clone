@@ -1,10 +1,65 @@
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white, 50%)) {
+  ::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+  }
+
+  &::-webkit-scrollbar-thumb:vertical,
+  &::-webkit-scrollbar-thumb:horizontal {
+      background: $foreground-color;
+      border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+      background: $background-color;
+      border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-track-piece {
+      background: $background-color;
+  }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}
+
+@include scrollbars(8px, hsla(202, 0%, 100%, 0.4), hsla(202, 0%, 0%, 0.15));
+
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+
 html,
 body {
   background: #9999ff;
   margin: 0;
-  padding: 30px 0 0;
+  padding: 0;
   font-family: sans-serif;
   color: #4d4d4d;
+  height: 100%;
+  overflow: hidden;
 }
 
 a {
@@ -13,28 +68,6 @@ a {
   &:hover {
     color: #111;
   }
-}
-
-header {
-  display: flex;
-  background: #333355;
-  margin: 0;
-  position: fixed;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-
-  h1 {
-    color: #ddd;
-    font-weight: bold;
-    font-size: 24px;
-  }
-}
-
-main {
-  padding: 20px;
 }
 
 button {
@@ -89,6 +122,93 @@ textarea {
   display: none !important;
 }
 
+#app {
+  height: 100%;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+}
+
+header {
+  height: 30px;
+  position: relative;
+  overflow: hidden;
+  padding: 5px 8px;
+  display: flex;
+  line-height: 30px;
+  flex: none;
+  background: #333355;
+  margin: 0;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+
+  h1 {
+    color: #ddd;
+    font-weight: bold;
+    line-height: 30px;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+  }
+}
+
+#content {
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  outline: none;
+  position: relative;
+  overflow-y: auto;
+}
+
+.board-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10px;
+  bottom: 0;
+}
+
+.board-content {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-right: 0;
+  -webkit-transition: margin .1s ease-in;
+  transition: margin .1s ease-in;
+}
+
+.board-canvas {
+  position: relative;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+#board {
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+  padding-right: 56px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
 .list-wrapper {
   width: 270px;
   margin: 0 5px;
@@ -122,6 +242,7 @@ textarea {
           margin: 0;
         }
         &__controls {
+          overflow: hidden;
           height: 0;
           margin: 0;
         }
@@ -325,10 +446,10 @@ textarea {
       }
 
       &__controls {
+        display: flex;
         height: 32px;
         -webkit-transition: margin 85ms ease-in,height 85ms ease-in;
         transition: margin 85ms ease-in,height 85ms ease-in;
-        overflow: hidden;
         margin: 4px 0 0;
 
         &__save-btn {
@@ -338,6 +459,7 @@ textarea {
           margin-top: 0;
           padding-top: 4px;
           padding-bottom: 4px;
+          border-bottom: 1px solid #ccc;
         }
       }
     }
