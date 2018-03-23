@@ -4,4 +4,4 @@
 ### Quickstart
 
 - yarn install (or npm install)
-- npm starnpm start
+- yarn start (or npm start)
