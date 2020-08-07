@@ -4,8 +4,8 @@
       height: $size;
   }
 
-  &::-webkit-scrollbar-thumb:vertical,
-  &::-webkit-scrollbar-thumb:horizontal {
+  ::-webkit-scrollbar-thumb:vertical,
+  ::-webkit-scrollbar-thumb:horizontal {
       background: $foreground-color;
       border-radius: 6px;
   }
