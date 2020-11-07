@@ -1,4 +1,3 @@
-import "jquery";
 import dragula from "dragula";
 
 import Store from "./store";
@@ -28,18 +27,28 @@ class Trello {
   }
 
   initalize() {
-    this.cardEdit = $(".list__cards__card__controls__edit");
+    this.cardEdit = document.querySelector(
+      ".list__cards__card__controls__edit"
+    );
 
-    this.cardForm = $(".list__card__composer__btn");
-    this.cardFormTextarea = $(".list__card__composer__new__textarea");
-    this.cardFormCancel = $(".list__card__composer__new__btn-cancel");
+    this.cardForm = document.querySelector(".list__card__composer__btn");
+    this.cardFormTextarea = document.querySelector(
+      ".list__card__composer__new__textarea"
+    );
+    this.cardFormCancel = document.querySelector(
+      ".list__card__composer__new__btn-cancel"
+    );
 
-    this.listForm = $(".list__add");
-    this.listFormSave = $(".list__add__form__controls__btn-save");
-    this.listFormCancel = $(".list__add__form__controls__btn-cancel");
+    this.listForm = document.querySelector(".list__add");
+    this.listFormSave = document.querySelector(
+      ".list__add__form__controls__btn-save"
+    );
+    this.listFormCancel = document.querySelector(
+      ".list__add__form__controls__btn-cancel"
+    );
 
-    this.columns = $(".list-wrapper");
-    this.cardList = $(".list__cards");
+    this.columns = document.querySelector(".list-wrapper");
+    this.cardList = document.querySelector(".list__cards");
 
     this.columnEls = this.columns.toArray();
     this.sortables = this.columnEls.concat(this.cardList.toArray());
@@ -58,9 +67,9 @@ class Trello {
     this.listFormCancel.on("click", this.toggleAddList);
 
     dragula(this.sortables, {
-      direction: 'horizontal',
+      direction: "horizontal",
       copy: false,
-      ignoreInputTextSelection: true
+      ignoreInputTextSelection: true,
     });
   }
 
@@ -69,20 +78,27 @@ class Trello {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
-    if ($(e.target).hasClass("list__card__composer__new__textarea")) {
+    if (
+      document
+        .querySelector(e.target)
+        .hasClass("list__card__composer__new__textarea")
+    ) {
       return;
     }
 
-    let newCardComposerAddBtn = $(e.currentTarget);
-    let newCardComposer = $(newCardComposerAddBtn)
+    let newCardComposerAddBtn = document.querySelector(e.currentTarget);
+    let newCardComposer = document
+      .querySelector(newCardComposerAddBtn)
       .closest(".list")
       .find(".list__card__composer__new");
 
-    $(".list__card__composer__new")
+    document
+      .querySelector(".list__card__composer__new")
       .not(newCardComposer)
       .addClass("hide");
 
-    $(".list__card__composer__btn")
+    document
+      .querySelector(".list__card__composer__btn")
       .not(newCardComposerAddBtn)
       .removeClass("hide");
 
@@ -95,14 +111,14 @@ class Trello {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
-    if ($(e.target).hasClass("list__add__form__name")) {
+    if (document.querySelector(e.target).hasClass("list__add__form__name")) {
       return;
     }
 
-    let newListComposerAddBtn = $(e.currentTarget);
-    let newListComposerWrapper = $(newListComposerAddBtn).closest(
-      ".list-wrapper"
-    );
+    let newListComposerAddBtn = document.querySelector(e.currentTarget);
+    let newListComposerWrapper = document
+      .querySelector(newListComposerAddBtn)
+      .closest(".list-wrapper");
 
     newListComposerWrapper.toggleClass("is-idle");
   }
@@ -114,47 +130,48 @@ class Trello {
 
     let data = this.getData(e.currentTarget);
 
-    let cardOffset = $(data.card.element).offset();
-    let cardWidth = $(data.card.element).outerWidth();
+    let cardOffset = document.querySelector(data.card.element).offset();
+    let cardWidth = document.querySelector(data.card.element).outerWidth();
 
     let editor = new Editor(data, this);
 
     this.root.append(editor.fragment);
 
-    $(".card__editor__card").css(cardOffset);
-    $(".card__editor__card").width(cardWidth);
+    document.querySelector(".card__editor__card").css(cardOffset);
+    document.querySelector(".card__editor__card").width(cardWidth);
   }
 
   getData(target) {
-    let cardEl = $(target).closest(".list__cards__card");
-    let listEl = $(target).closest(".list");
+    let cardEl = document.querySelector(target).closest(".list__cards__card");
+    let listEl = document.querySelector(target).closest(".list");
 
     let list = $.grep(
       this.board.lists,
-      l => l.id === $(listEl).data("list-id")
+      (l) => l.id === document.querySelector(listEl).data("list-id")
     )[0];
 
     let card = $.grep(
       list.cards,
-      c => c.id === $(cardEl).data("card-id"))[0];
+      (c) => c.id === document.querySelector(cardEl).data("card-id")
+    )[0];
 
     return {
       list: {
         props: list,
-        element: listEl
+        element: listEl,
       },
       card: {
         props: card,
-        element: cardEl
-      }
+        element: cardEl,
+      },
     };
   }
 
   getHighestIndex(lists) {
     let highestIndex = -1;
 
-    lists.forEach(list => {
-      list.cards.forEach(card => {
+    lists.forEach((list) => {
+      list.cards.forEach((card) => {
         if (card.id > highestIndex) {
           highestIndex = card.id;
         }
@@ -168,14 +185,15 @@ class Trello {
     event.preventDefault();
     event.stopPropagation();
 
-    let listTitle = $(event.target)
+    let listTitle = document
+      .querySelector(event.target)
       .closest("form")
       .serializeArray()[0].value;
 
     let newList = {
       id: this.getHighestIndex(this.board.lists),
       title: listTitle,
-      cards: []
+      cards: [],
     };
 
     const listClass = new List(newList, this);
@@ -195,9 +213,9 @@ class Trello {
   render() {
     let caller = this;
 
-    $(this.root).empty();
+    document.querySelector(this.root).innerHTML = "";
 
-    const lists = this.board.lists.map(list => {
+    const lists = this.board.lists.map((list) => {
       return new List(list, caller);
     });
 
@@ -205,13 +223,13 @@ class Trello {
 
     lists.push(listComposer);
 
-    const content = lists.map(list => list.fragment).join("");
-    $(this.root)[0].innerHTML = content;
+    const content = lists.map((list) => list.fragment).join("");
+    document.querySelector(this.root)[0].innerHTML = content;
   }
 }
 
-$(function() {
+document.querySelector(function () {
   const store = new Store("trello-clone");
 
-  new Trello(store, $("#board"));
+  new Trello(store, document.querySelector("#board"));
 });

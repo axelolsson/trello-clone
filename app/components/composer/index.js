@@ -1,5 +1,3 @@
-import "jquery";
-
 export default class Composer {
   constructor(caller) {
     this.caller = caller;
@@ -36,19 +34,15 @@ export default class Composer {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
-    if ($(e.target).hasClass("list__add__form__name")) {
+    if (e.target.hasClass("list__add__form__name")) {
       return;
     }
-
-    debugger;
   }
 
-  getData(target) {
-  }
+  getData(target) {}
 
   render() {
-    return (
-      `<div class='list-wrapper is-idle'>
+    return `<div class='list-wrapper is-idle'>
         <div class='list__add'>
           <form class='list__add__form'>
             <span href='#' class='list__add__form__placeholder'>Add a list…</span>
@@ -60,7 +54,6 @@ export default class Composer {
           </form>
         </div>
       </div>
-      `
-    );
+      `;
   }
 }

@@ -1,5 +1,3 @@
-import "jquery";
-
 export default class Card {
   constructor(listId, card, caller) {
     this.list = listId;
@@ -16,8 +14,11 @@ export default class Card {
   }
 
   initalize() {
-    this.cardDelete = 'div[data-list-id="' + this.list + '"] .list__cards__card__controls__delete';
-    this.cardFormSave = '.list__card__composer__new__btn-save';
+    this.cardDelete =
+      'div[data-list-id="' +
+      this.list +
+      '"] .list__cards__card__controls__delete';
+    this.cardFormSave = ".list__card__composer__new__btn-save";
   }
 
   addEventListeners() {
@@ -32,17 +33,17 @@ export default class Card {
 
     let card = {};
     let cardForm = $(e.currentTarget.form);
-    let listId = $(cardForm).closest('.list').data('list-id');
+    let listId = $(cardForm).closest(".list").data("list-id");
 
     $(cardForm)
       .serializeArray()
-      .map(field => (card[field.name] = field.value));
+      .map((field) => (card[field.name] = field.value));
 
     if (card.title === "") {
       return;
     }
 
-    let list = $.grep(this.caller.board.lists, l => l.id == listId)[0];
+    let list = this.caller.board.lists.filter((l) => l.id == listId)[0];
 
     card.id = this.caller.getHighestIndex(this.caller.board.lists) + 1;
     card.description = "";
@@ -59,8 +60,8 @@ export default class Card {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
-    let listId = $(e.currentTarget).closest('.list').data('list-id');
-    let cardId = $(e.currentTarget).closest('.list__cards__card').data('card-id');
+    let listId = e.currentTarget.closest(".list").data("list-id");
+    let cardId = e.currentTarget.closest(".list__cards__card").data("card-id");
 
     this.caller.store.remove({ listId: listId, cardId: cardId }, (board) => {
       this.caller.board = board;
@@ -69,8 +70,7 @@ export default class Card {
   }
 
   render() {
-    return (
-      `<a href="#" data-card-id="${this.card.id}" class="list__cards__card">
+    return `<a href="#" data-card-id="${this.card.id}" class="list__cards__card">
         <div class="list__cards__card__details">
             <div class="list__cards__card__title">
               ${this.card.title}
@@ -80,7 +80,6 @@ export default class Card {
             <span class="list__cards__card__controls__edit"><i class="fas fa-pencil-alt"></i></span>
             <span class="list__cards__card__controls__delete"><i class="fas fa-times"></i></i></span>
           </div>
-      </a>`
-    );
+      </a>`;
   }
 }

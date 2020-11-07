@@ -1,5 +1,3 @@
-import "jquery";
-
 export default class Editor {
   constructor(data, caller) {
     this.data = data;
@@ -17,8 +15,8 @@ export default class Editor {
   }
 
   initalize() {
-    this.cardEditorDelete = '.card__editor__card__buttons__delete';
-    this.cardEditorSave   = '.card__editor__card__buttons__save';
+    this.cardEditorDelete = ".card__editor__card__buttons__delete";
+    this.cardEditorSave = ".card__editor__card__buttons__save";
   }
 
   addEventListeners() {
@@ -32,16 +30,16 @@ export default class Editor {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
-    let newData = $(e.currentTarget.form).serializeArray()[0];
+    // let newData = e.currentTarget.form.serializeArray()[0];
     let domData = this.getData(e.currentTarget.form);
 
     this.caller.store.update(
       {
         listId: domData.list.id,
         cardId: domData.card.id,
-        data: newData
+        data: null,
       },
-      board => {
+      (board) => {
         this.caller.board = board;
         this.caller.update();
       }
@@ -52,9 +50,9 @@ export default class Editor {
     this.caller.store.remove(
       {
         listId: this.data.list.props.id,
-        cardId: this.data.card.props.id
+        cardId: this.data.card.props.id,
       },
-      board => {
+      (board) => {
         this.caller.board = board;
         this.caller.update();
       }
@@ -64,17 +62,23 @@ export default class Editor {
   getData(target) {
     let cardEditorEl = $(target).closest(".card__editor__card");
 
-    let list = $.grep(this.caller.board.lists, l => l.id == $(cardEditorEl).data("list-id"))[0];
-    let card = $.grep(list.cards, c => c.id === $(cardEditorEl).data("card-id"))[0];
+    let list = this.caller.board.lists.filter(
+      (l) => l.id == cardEditorEl.data("list-id")
+    )[0];
+    let card = list.cards
+      .filter((c) => c.id === cardEditorEl)
+      .data("card-id")[0];
 
     return {
       list: list,
-      card: card
+      card: card,
     };
   }
 
   toggleEditor(e) {
-    if ($(e.target).hasClass("card__editor__card__edit__details__textarea")) {
+    if (
+      e.target.classList.contains("card__editor__card__edit__details__textarea")
+    ) {
       return;
     }
 
@@ -82,7 +86,7 @@ export default class Editor {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
-    this.caller.root.find('.card__editor').remove();
+    this.caller.root.find(".card__editor").remove();
   }
 
   render() {
